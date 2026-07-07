@@ -1,0 +1,9 @@
+{
+    "activeMachine": "selec_twix1",
+    "machines": {
+        "selec_twix1": {
+            "name": "Selec Twix-1",
+            "profilePath": "./selec_twix1/profile.json"
+        }
+    }
+}

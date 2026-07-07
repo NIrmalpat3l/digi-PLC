@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMI - Universal SCADA</title>
+    <link rel="icon" href="data:,">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="hmi-layout">
+        <!-- Top Status Bar -->
+        <header class="hmi-header">
+            <div class="sys-title">HMI SYSTEM</div>
+            <div class="sys-status">
+                <span id="connection-dot" class="led-indicator led-red"></span>
+                <span id="connection-text">COMM FAULT</span>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Injected Here -->
+        <div class="hmi-content" id="hmi-content-container">
+            Loading interface...
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog Overlay -->
+    <div id="confirm-dialog" class="dialog-overlay hidden">
+        <div class="dialog-box">
+            <div class="dialog-header">CONFIRM ACTION</div>
+            <div class="dialog-body">
+                Are you sure you want to execute this command?
+            </div>
+            <div class="dialog-footer">
+                <button id="btn-confirm-cancel" class="btn-dialog btn-cancel">CANCEL</button>
+                <button id="btn-confirm-ok" class="btn-dialog btn-execute">EXECUTE</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

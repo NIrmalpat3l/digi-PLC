@@ -1,0 +1,46 @@
+{
+  "serial": {
+    "port": "COM3",
+    "baudRate": 19200,
+    "parity": "none",
+    "stopBits": 2,
+    "dataBits": 8,
+    "unitId": 1
+  },
+  "server": {
+    "port": 3001,
+    "host": "0.0.0.0",
+    "secretKey": "my_super_secret_key_change_in_production"
+  },
+  "polling": {
+    "intervalMs": 500
+  },
+  "modbus": {
+    "wordOrder": "LE", 
+    "pulseDurationMs": 300
+  },
+  "registers": {
+    "coils": {
+      "cycleStart": 512,
+      "cycleStop": 514,
+      "output1": 0,
+      "output2": 1,
+      "output3": 2,
+      "output4": 3
+    },
+    "holding": {
+      "output1OnTime": 1537,
+      "output2OnTime": 1541,
+      "output3OnTime": 1545,
+      "output4OnTime": 1549,
+      "delayTime": 1539
+    },
+    "input": {
+      "output1OnTime": 1537,
+      "output2OnTime": 1541,
+      "output3OnTime": 1545,
+      "output4OnTime": 1549,
+      "delayTime": 1539
+    }
+  }
+}

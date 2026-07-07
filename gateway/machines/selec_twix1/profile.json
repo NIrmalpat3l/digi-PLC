@@ -1,0 +1,22 @@
+{
+    "id": "selec_twix1",
+    "name": "Selec Twix-1",
+    "driver": "ModbusRTU",
+    "connection": {
+        "port": "COM3",
+        "baudRate": 19200,
+        "parity": "none",
+        "stopBits": 2,
+        "dataBits": 8,
+        "unitId": 1
+    },
+    "pollingIntervalMs": 100,
+    "pulseDurationMs": 300,
+    "wordOrder": "LE",
+    "logger": {
+        "flushIntervalMs": 100,
+        "downsampleBucketSec": 1,
+        "fileRotation": "hourly",
+        "exportIntervalMs": 5000
+    }
+}

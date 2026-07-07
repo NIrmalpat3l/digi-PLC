@@ -1,0 +1,56 @@
+{
+    "layout": [
+        {
+            "panel": "MAIN OPERATIONS",
+            "cssClass": "operations-panel",
+            "components": [
+                {
+                    "group": "cycle-controls",
+                    "items": [
+                        { "type": "momentary-button", "pointId": "cycle_start_momentary_bit", "label": "CYCLE START", "color": "run", "confirm": true },
+                        { "type": "momentary-button", "pointId": "cycle_stop_momentary_bit", "label": "CYCLE STOP", "color": "stop" }
+                    ]
+                },
+                {
+                    "group": "outputs-grid",
+                    "subtitle": "OUTPUT OVERRIDE",
+                    "items": [
+                        { "type": "toggle", "pointId": "output_1", "label": "OUTPUT 1" },
+                        { "type": "toggle", "pointId": "output_2", "label": "OUTPUT 2" },
+                        { "type": "toggle", "pointId": "output_3", "label": "OUTPUT 3" },
+                        { "type": "toggle", "pointId": "output_4", "label": "OUTPUT 4" }
+                    ]
+                }
+            ]
+        },
+        {
+            "panel": "PROCESS TIMERS",
+            "cssClass": "monitoring-panel",
+            "components": [
+                {
+                    "group": "scada-table",
+                    "headers": ["PARAMETER", "SETPOINT (ms)", "ACTUAL (ms)"],
+                    "items": [
+                        { "type": "set-value-display", "setPointId": "output_1_on_time_set", "actualPointId": "output_1_on_time_running", "label": "Output 1 Time" },
+                        { "type": "set-value-display", "setPointId": "output_2_on_time_set", "actualPointId": "output_2_on_time_running", "label": "Output 2 Time" },
+                        { "type": "set-value-display", "setPointId": "output_3_on_time_set", "actualPointId": "output_3_on_time_running", "label": "Output 3 Time" },
+                        { "type": "set-value-display", "setPointId": "output_4_on_time_set", "actualPointId": "output_4_on_time_running", "label": "Output 4 Time" },
+                        { "type": "set-value-display", "setPointId": "delay_time_set", "actualPointId": "delay_time_running", "label": "Delay Time", "highlight": true }
+                    ]
+                }
+            ]
+        },
+        {
+            "panel": "SOFTWARE SETTINGS",
+            "cssClass": "monitoring-panel",
+            "components": [
+                {
+                    "group": "outputs-grid",
+                    "items": [
+                        { "type": "software-setting", "settingKey": "downsampleBucketSec", "label": "Excel Log Res. (sec)", "defaultValue": 1 }
+                    ]
+                }
+            ]
+        }
+    ]
+}

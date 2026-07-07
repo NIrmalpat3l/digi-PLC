@@ -1,0 +1,162 @@
+[
+  {
+    "id": "cycle_start_momentary_bit",
+    "name": "Cycle Start (Momentary Bit)",
+    "modbusType": "coil",
+    "dataType": "bool",
+    "behavior": "momentary",
+    "address": 512,
+    "originalAddress": 513,
+    "prefix": 0
+  },
+  {
+    "id": "cycle_stop_momentary_bit",
+    "name": "Cycle Stop (Momentary Bit)",
+    "modbusType": "coil",
+    "dataType": "bool",
+    "behavior": "momentary",
+    "address": 514,
+    "originalAddress": 515,
+    "prefix": 0
+  },
+  {
+    "id": "output_1",
+    "name": "Output-1",
+    "modbusType": "coil",
+    "dataType": "bool",
+    "behavior": "standard",
+    "address": 0,
+    "originalAddress": 1,
+    "prefix": 0
+  },
+  {
+    "id": "output_2",
+    "name": "Output-2",
+    "modbusType": "coil",
+    "dataType": "bool",
+    "behavior": "standard",
+    "address": 1,
+    "originalAddress": 2,
+    "prefix": 0
+  },
+  {
+    "id": "output_3",
+    "name": "Output-3",
+    "modbusType": "coil",
+    "dataType": "bool",
+    "behavior": "standard",
+    "address": 2,
+    "originalAddress": 3,
+    "prefix": 0
+  },
+  {
+    "id": "output_4",
+    "name": "Output-4",
+    "modbusType": "coil",
+    "dataType": "bool",
+    "behavior": "standard",
+    "address": 3,
+    "originalAddress": 4,
+    "prefix": 0
+  },
+  {
+    "id": "output_1_on_time_set",
+    "name": "Output-1 On time (SET)",
+    "modbusType": "holdingRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1537,
+    "originalAddress": 1537,
+    "prefix": 4
+  },
+  {
+    "id": "output_2_on_time_set",
+    "name": "Output-2 On time (SET)",
+    "modbusType": "holdingRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1541,
+    "originalAddress": 1541,
+    "prefix": 4
+  },
+  {
+    "id": "output_3_on_time_set",
+    "name": "Output-3 On time (SET)",
+    "modbusType": "holdingRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1545,
+    "originalAddress": 1545,
+    "prefix": 4
+  },
+  {
+    "id": "output_4_on_time_set",
+    "name": "Output-4 On time (SET)",
+    "modbusType": "holdingRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1549,
+    "originalAddress": 1549,
+    "prefix": 4
+  },
+  {
+    "id": "delay_time_set",
+    "name": "Delay Time (SET)",
+    "modbusType": "holdingRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1539,
+    "originalAddress": 1539,
+    "prefix": 4
+  },
+  {
+    "id": "output_1_on_time_running",
+    "name": "Output-1 On time (Running)",
+    "modbusType": "inputRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1537,
+    "originalAddress": 1537,
+    "prefix": 3
+  },
+  {
+    "id": "output_2_on_time_running",
+    "name": "Output-2 On time (Running)",
+    "modbusType": "inputRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1541,
+    "originalAddress": 1541,
+    "prefix": 3
+  },
+  {
+    "id": "output_3_on_time_running",
+    "name": "Output-3 On time (Running)",
+    "modbusType": "inputRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1545,
+    "originalAddress": 1545,
+    "prefix": 3
+  },
+  {
+    "id": "output_4_on_time_running",
+    "name": "Output-4 On time (Running)",
+    "modbusType": "inputRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1549,
+    "originalAddress": 1549,
+    "prefix": 3
+  },
+  {
+    "id": "delay_time_running",
+    "name": "Delay Time (Running)",
+    "modbusType": "inputRegister",
+    "dataType": "32bit",
+    "behavior": "standard",
+    "address": 1539,
+    "originalAddress": 1539,
+    "prefix": 3
+  }
+]
