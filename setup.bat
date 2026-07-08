@@ -24,18 +24,6 @@ if not exist "node_modules\" (
 )
 cd ..
 
-:: Setup Frontend
-echo.
-echo Setting up Frontend...
-cd frontend
-if not exist "node_modules\" (
-    echo Installing Frontend dependencies...
-    call npm install
-) else (
-    echo Frontend dependencies are already installed. Skipping...
-)
-cd ..
-
 echo.
 echo Setup complete! You can now start the applications.
 pause

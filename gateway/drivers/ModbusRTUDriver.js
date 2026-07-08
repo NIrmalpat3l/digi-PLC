@@ -5,6 +5,11 @@ class ModbusRTUDriver extends DriverInterface {
     constructor() {
         super();
         this.client = new ModbusRTU();
+        
+        // Catch underlying hardware/serial port errors so they don't crash Node.js
+        this.client.on('error', (err) => {
+            console.error('[ModbusRTU] Underlying SerialPort error:', err.message);
+        });
     }
     
     async connect(config) {

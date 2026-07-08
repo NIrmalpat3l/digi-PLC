@@ -23,15 +23,4 @@ else
 fi
 cd ..
 
-# Setup Frontend
-echo "Setting up Frontend..."
-cd frontend || exit
-if [ ! -d "node_modules" ]; then
-    echo "Installing Frontend dependencies..."
-    npm install
-else
-    echo "Frontend dependencies are already installed. Skipping..."
-fi
-cd ..
-
 echo "Setup complete! You can now start the applications."
