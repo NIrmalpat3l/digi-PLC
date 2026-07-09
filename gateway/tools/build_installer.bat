@@ -19,7 +19,12 @@ if not exist %CSC% (
     exit /b 1
 )
 cd tools
-%CSC% /target:winexe /out:DigiPLCTray.exe DigiPLCTray.cs
+if exist icon.ico (
+    echo Using custom icon.ico for C# executable...
+    %CSC% /target:winexe /win32icon:icon.ico /out:DigiPLCTray.exe DigiPLCTray.cs
+) else (
+    %CSC% /target:winexe /out:DigiPLCTray.exe DigiPLCTray.cs
+)
 
 echo [4/4] Building Windows Installer with Inno Setup...
 set ISCC="C:\Program Files (x86)\Inno Setup 6\ISCC.exe"

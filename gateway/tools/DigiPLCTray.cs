@@ -24,10 +24,17 @@ namespace DigiPLCTray
 
         public TrayApplicationContext()
         {
+            Icon appIcon = SystemIcons.Application;
+            string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "icon.ico");
+            if (File.Exists(iconPath))
+            {
+                appIcon = new Icon(iconPath);
+            }
+
             // Initialize Tray Icon
             trayIcon = new NotifyIcon()
             {
-                Icon = SystemIcons.Application,
+                Icon = appIcon,
                 ContextMenu = new ContextMenu(new MenuItem[] {
                     new MenuItem("Open HMI", OpenHMI),
                     new MenuItem("-"),

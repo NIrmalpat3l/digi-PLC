@@ -4,6 +4,9 @@ AppVersion=1.0.0
 DefaultDirName={autopf}\DigiPLC
 DefaultGroupName=Digi-PLC
 UninstallDisplayIcon={app}\DigiPLCTray.exe
+#ifexist "icon.ico"
+SetupIconFile=icon.ico
+#endif
 Compression=lzma2
 SolidCompression=yes
 OutputDir=..\dist
@@ -16,6 +19,9 @@ Name: "startup"; Description: "Launch automatically when Windows starts"; GroupD
 [Files]
 Source: "..\gateway-win.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DigiPLCTray.exe"; DestDir: "{app}"; Flags: ignoreversion
+#ifexist "icon.ico"
+Source: "icon.ico"; DestDir: "{app}"; Flags: ignoreversion
+#endif
 
 [Icons]
 Name: "{group}\Digi-PLC Gateway"; Filename: "{app}\DigiPLCTray.exe"
