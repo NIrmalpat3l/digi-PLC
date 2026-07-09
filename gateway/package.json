@@ -1,7 +1,19 @@
 {
   "name": "gateway",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
+  "bin": "server.js",
+  "pkg": {
+    "assets": [
+      "machines/**/*",
+      "public/**/*",
+      "config.json",
+      "node_modules/**/*.node",
+      "node_modules/@serialport/bindings-cpp/prebuilds/**/*",
+      "node_modules/sqlite3/lib/binding/**/*",
+      "node_modules/sqlite3/build/Release/**/*"
+    ]
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,8 +29,12 @@
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "modbus-serial": "^8.0.25",
+    "serialport": "^12.0.0",
     "sqlite3": "^6.0.1",
     "ws": "^8.21.0",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
   }
 }

@@ -48,6 +48,33 @@ function broadcastCache(cacheData) {
 // Initialize the generic core engine
 const engine = new CoreEngine(broadcastCache);
 
+// API Endpoint for COM Ports
+app.get('/api/ports', async (req, res) => {
+    try {
+        const { SerialPort } = require('serialport');
+        const ports = await SerialPort.list();
+        res.json(ports);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.post('/api/ports/save', (req, res) => {
+    try {
+        const { port } = req.body;
+        const paths = require('./core/paths');
+        const appConfig = paths.getConfig() || { ports: {} };
+        appConfig.ports = appConfig.ports || {};
+        appConfig.ports[currentMachineId] = port;
+        paths.saveConfig(appConfig);
+        
+        engine.profile.connection.port = port;
+        res.json({ success: true });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // API Endpoint to serve the screen config
 app.get('/api/config', (req, res) => {
     try {

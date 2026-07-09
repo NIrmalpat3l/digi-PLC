@@ -17,8 +17,8 @@ class CoreEngine {
         const registryPath = path.join(__dirname, '../machines/registry.json');
         const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
         
-        const machineId = registry.activeMachine;
-        const profilePath = path.join(__dirname, '../machines', registry.machines[machineId].profilePath);
+        this.machineId = registry.activeMachine;
+        const profilePath = path.join(__dirname, '../machines', registry.machines[this.machineId].profilePath);
         this.profile = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
         
         const pointsPath = path.join(path.dirname(profilePath), 'points.json');
@@ -39,7 +39,14 @@ class CoreEngine {
     
     async connect() {
         try {
-            console.log(`Connecting via ${this.profile.driver}...`);
+            const paths = require('./paths');
+            const appConfig = paths.getConfig() || { ports: {} };
+            
+            if (appConfig.ports && appConfig.ports[this.machineId]) {
+                this.profile.connection.port = appConfig.ports[this.machineId];
+            }
+
+            console.log(`Connecting via ${this.profile.driver} on ${this.profile.connection.port}...`);
             await this.driver.connect(this.profile.connection);
             
             this.cache.status = "connected";
@@ -47,9 +54,63 @@ class CoreEngine {
             this.startPolling();
         } catch (error) {
             console.error("Connection error:", error.message);
-            this.cache.status = "disconnected";
-            this.broadcastCallback(this.cache);
-            await this.driver.disconnect();
+            if (this.profile.driver === "ModbusRTU") {
+                this.cache.status = "setup_required";
+                this.broadcastCallback(this.cache);
+                await this.autoDetectPort();
+            } else {
+                this.cache.status = "disconnected";
+                this.broadcastCallback(this.cache);
+                await this.driver.disconnect();
+                setTimeout(() => this.connect(), 5000);
+            }
+        }
+    }
+    
+    async autoDetectPort() {
+        console.log("Starting Auto COM Port Detection...");
+        try {
+            const { SerialPort } = require('serialport');
+            const ports = await SerialPort.list();
+            let workingPort = null;
+            let respondCount = 0;
+
+            for (const p of ports) {
+                console.log(`Testing port ${p.path}...`);
+                const testDriver = new ModbusRTUDriver();
+                try {
+                    await testDriver.connect({
+                        ...this.profile.connection,
+                        port: p.path,
+                        timeout: 1000
+                    });
+                    await testDriver.readCoils(0, 1);
+                    console.log(`Port ${p.path} responded successfully!`);
+                    workingPort = p.path;
+                    respondCount++;
+                } catch (e) {
+                    console.log(`Port ${p.path} failed: ${e.message}`);
+                } finally {
+                    await testDriver.disconnect();
+                }
+            }
+
+            if (respondCount === 1 && workingPort) {
+                console.log(`Auto-detection succeeded. Saving port ${workingPort}.`);
+                const paths = require('./paths');
+                const appConfig = paths.getConfig() || { ports: {} };
+                appConfig.ports = appConfig.ports || {};
+                appConfig.ports[this.machineId] = workingPort;
+                paths.saveConfig(appConfig);
+                
+                this.profile.connection.port = workingPort;
+                setTimeout(() => this.connect(), 1000);
+            } else {
+                console.log(`Auto-detection inconclusive (Found ${respondCount} working ports). Operator setup required.`);
+                setTimeout(() => this.connect(), 5000);
+            }
+        } catch (e) {
+            console.error("Auto-detection failed critically:", e.message);
             setTimeout(() => this.connect(), 5000);
         }
     }

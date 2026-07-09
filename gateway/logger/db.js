@@ -1,12 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-const fs = require('fs');
+const paths = require('../core/paths');
 
-const DB_DIR = path.join(__dirname, '../db');
-if (!fs.existsSync(DB_DIR)) {
-    fs.mkdirSync(DB_DIR, { recursive: true });
-}
-const DB_PATH = path.join(DB_DIR, 'logger.db');
+const DB_PATH = paths.loggerDbPath;
 
 class LoggerDB {
     constructor() {

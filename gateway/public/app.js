@@ -224,9 +224,15 @@ function updateDashboard(data) {
     if (data.status === 'connected') {
         connectionDot.className = 'led-indicator led-green';
         connectionText.textContent = 'RUNNING';
+        document.getElementById('setup-dialog').classList.add('hidden');
+    } else if (data.status === 'setup_required') {
+        connectionDot.className = 'led-indicator led-yellow';
+        connectionText.textContent = 'SETUP REQ';
+        showSetupDialog();
     } else {
         setDisconnected();
     }
+
 
     if (data.values) {
         for (const [key, value] of Object.entries(data.values)) {
@@ -255,3 +261,46 @@ function updateDashboard(data) {
 }
 
 init();
+
+function showSetupDialog() {
+    const dialog = document.getElementById('setup-dialog');
+    if (!dialog.classList.contains('hidden')) return; // Already showing
+    
+    dialog.classList.remove('hidden');
+    const select = document.getElementById('com-port-select');
+    const saveBtn = document.getElementById('btn-save-port');
+    
+    fetch('/api/ports')
+        .then(res => res.json())
+        .then(ports => {
+            select.innerHTML = '';
+            if (ports.length === 0) {
+                select.innerHTML = '<option disabled>No COM ports found</option>';
+            } else {
+                ports.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.path;
+                    opt.textContent = `${p.path} - ${p.friendlyName || p.manufacturer || 'Unknown Device'}`;
+                    select.appendChild(opt);
+                });
+            }
+        })
+        .catch(err => {
+            select.innerHTML = '<option disabled>Error loading ports</option>';
+        });
+        
+    saveBtn.onclick = () => {
+        const port = select.value;
+        if (!port) return;
+        saveBtn.textContent = "SAVING...";
+        fetch('/api/ports/save', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ port })
+        }).then(() => {
+            saveBtn.textContent = "SAVE CONFIG";
+            dialog.classList.add('hidden');
+            connectionText.textContent = 'CONNECTING...';
+        });
+    };
+}

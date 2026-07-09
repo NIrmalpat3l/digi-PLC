@@ -38,6 +38,22 @@
             </div>
         </div>
     </div>
+    <!-- Setup Dialog Overlay -->
+    <div id="setup-dialog" class="dialog-overlay hidden">
+        <div class="dialog-box">
+            <div class="dialog-header">INITIAL SETUP REQUIRED</div>
+            <div class="dialog-body">
+                Auto-detection could not definitively locate the PLC. Please select the correct COM port below:
+                <br><br>
+                <select id="com-port-select" style="width: 100%; padding: 8px; font-size: 16px;">
+                    <option>Loading ports...</option>
+                </select>
+            </div>
+            <div class="dialog-footer">
+                <button id="btn-save-port" class="btn-dialog btn-execute">SAVE CONFIG</button>
+            </div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
