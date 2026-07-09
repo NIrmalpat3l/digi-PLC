@@ -4,6 +4,7 @@ const ExcelJS = require('exceljs');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const path = require('path');
 const fs = require('fs');
+const paths = require('../core/paths');
 
 class Exporter {
     constructor() {
@@ -12,11 +13,7 @@ class Exporter {
             downsampleBucketSec: 1
         };
         this.isExporting = false;
-        
-        const dataDir = path.join(__dirname, '../datasheets');
-        if (!fs.existsSync(dataDir)) {
-            fs.mkdirSync(dataDir, { recursive: true });
-        }
+        this.isExporting = false;
     }
 
     init(machineId, config) {
@@ -39,7 +36,7 @@ class Exporter {
         
         const filenameStr = `${prefix}_${this.machineId}_${yyyy}${mm}${dd}_${hh}${min}${sec}`;
         
-        return path.join(__dirname, '../datasheets', `${filenameStr}.xlsx`);
+        return path.join(paths.datasheetsDir, `${filenameStr}.xlsx`);
     }
 
     downsample(readings) {

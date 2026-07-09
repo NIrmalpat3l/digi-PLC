@@ -4,7 +4,6 @@ const WebSocket = require('ws');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const { fork } = require('child_process');
 const CoreEngine = require('./core/engine');
 
 const app = express();
@@ -13,12 +12,10 @@ const wss = new WebSocket.Server({ server, path: "/ws/live" });
 
 let currentMachineId = 'selec_twix1'; // Default for now
 
-// Fork the decoupled Logger Service
-const loggerProcess = fork(path.join(__dirname, 'logger', 'index.js'));
-loggerProcess.send({ type: 'MACHINE_INIT', machineId: currentMachineId });
-
-// Clean up logger process on exit
-process.on('exit', () => loggerProcess.kill());
+// Run Logger in the main process to fix pkg native module errors with child_process
+const LoggerService = require('./logger/index_module.js');
+const logger = new LoggerService();
+logger.init(currentMachineId);
 
 // Middleware
 app.use(cors());
@@ -35,13 +32,13 @@ function broadcastCache(cacheData) {
         }
     });
 
-    // 2. Publish to decoupled Logger Service via IPC
+    // 2. Publish to Logger Service
     if (cacheData.status === 'connected') {
-        loggerProcess.send({
-            type: 'DATA',
-            machineId: currentMachineId,
-            payload: cacheData
-        });
+        try {
+            logger.handleData(currentMachineId, cacheData);
+        } catch (err) {
+            console.error('Logger Broadcast Error:', err.message);
+        }
     }
 }
 
@@ -102,12 +99,16 @@ app.post('/api/write', async (req, res) => {
         await engine.queueWrite(pointId, value);
         
         // Intercept cycle commands for the logger
-        if (pointId === 'cycle_start_momentary_bit' && value === true) {
-            loggerProcess.send({ type: 'CYCLE_START' });
-            engine.cache.system_cycle_running = true;
-        } else if (pointId === 'cycle_stop_momentary_bit' && value === true) {
-            loggerProcess.send({ type: 'CYCLE_STOP' });
-            engine.cache.system_cycle_running = false;
+        try {
+            if (pointId === 'cycle_start_momentary_bit' && value === true) {
+                logger.handleCycleStart();
+                engine.cache.system_cycle_running = true;
+            } else if (pointId === 'cycle_stop_momentary_bit' && value === true) {
+                logger.handleCycleStop();
+                engine.cache.system_cycle_running = false;
+            }
+        } catch (err) {
+            console.error('Logger Cycle Intercept Error:', err.message);
         }
         
         res.json({ success: true });
@@ -120,7 +121,7 @@ app.post('/api/write', async (req, res) => {
 app.post('/api/settings', (req, res) => {
     const { downsampleBucketSec } = req.body;
     if (downsampleBucketSec !== undefined) {
-        loggerProcess.send({ type: 'UPDATE_CONFIG', config: { downsampleBucketSec: Number(downsampleBucketSec) } });
+        logger.updateConfig({ downsampleBucketSec: Number(downsampleBucketSec) });
     }
     res.json({ success: true });
 });
@@ -135,7 +136,7 @@ wss.on('connection', (ws) => {
             if (data.type === 'UPDATE_SETTING') {
                 engine.cache[data.settingKey] = data.value;
                 if (data.settingKey === 'downsampleBucketSec') {
-                    loggerProcess.send({ type: 'UPDATE_CONFIG', config: { downsampleBucketSec: Number(data.value) } });
+                    logger.updateConfig({ downsampleBucketSec: Number(data.value) });
                 }
             }
         } catch (e) {

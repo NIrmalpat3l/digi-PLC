@@ -6,6 +6,7 @@ const appData = process.env.APPDATA || (process.platform === 'darwin' ? path.joi
 
 const appDir = path.join(appData, 'DigiPLC');
 const dbDir = path.join(appDir, 'db');
+const datasheetsDir = path.join(appDir, 'datasheets');
 
 // Ensure directories exist
 if (!fs.existsSync(appDir)) {
@@ -13,6 +14,9 @@ if (!fs.existsSync(appDir)) {
 }
 if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true });
+}
+if (!fs.existsSync(datasheetsDir)) {
+    fs.mkdirSync(datasheetsDir, { recursive: true });
 }
 
 const appConfigPath = path.join(appDir, 'config.json');
@@ -28,6 +32,7 @@ if (!fs.existsSync(appConfigPath)) {
 module.exports = {
     appDir,
     dbDir,
+    datasheetsDir,
     configPath: appConfigPath,
     loggerDbPath: path.join(dbDir, 'logger.db'),
     

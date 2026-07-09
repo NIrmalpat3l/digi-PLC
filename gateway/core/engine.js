@@ -225,6 +225,7 @@ class CoreEngine {
     
     queueWrite(pointId, value) {
         return new Promise((resolve, reject) => {
+            if (!this.driver.isOpen) return reject(new Error("PLC not connected"));
             const point = this.points.find(p => p.id === pointId);
             if (!point) return reject(new Error("Unknown point: " + pointId));
             
