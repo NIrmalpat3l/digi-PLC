@@ -34,9 +34,16 @@ class Exporter {
         const min = String(date.getMinutes()).padStart(2, '0');
         const sec = String(date.getSeconds()).padStart(2, '0');
         
+        const dateFolder = `${yyyy}-${mm}-${dd}`;
+        const targetDir = path.join(paths.datasheetsDir, dateFolder);
+        
+        if (!fs.existsSync(targetDir)) {
+            fs.mkdirSync(targetDir, { recursive: true });
+        }
+        
         const filenameStr = `${prefix}_${this.machineId}_${yyyy}${mm}${dd}_${hh}${min}${sec}`;
         
-        return path.join(paths.datasheetsDir, `${filenameStr}.xlsx`);
+        return path.join(targetDir, `${filenameStr}.xlsx`);
     }
 
     downsample(readings) {
@@ -136,7 +143,12 @@ class Exporter {
             this.createExcel(rawFilepath, summaryFilepath, dataToWrite);
 
             // Generate Standalone Report with Timeline Chart
-            await this.generateReport(reportFilepath, dataToWrite, this.machineId);
+            try {
+                await this.generateReport(reportFilepath, dataToWrite, this.machineId);
+            } catch (reportErr) {
+                console.error('[Logger Exporter] Failed to generate visual report:', reportErr.message);
+                fs.writeFileSync(path.join(paths.datasheetsDir, 'report_error.log'), reportErr.stack || reportErr.message);
+            }
             
             console.log(`[Logger Exporter] Successfully exported rows to datasheets directory.`);
 

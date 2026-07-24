@@ -26,6 +26,11 @@ if exist icon.ico (
     %CSC% /target:winexe /out:DigiPLCTray.exe DigiPLCTray.cs
 )
 
+echo [3.5/4] Downloading VC++ Redistributable for Graphics/Canvas Support...
+if not exist vc_redist.x64.exe (
+    curl -L -o vc_redist.x64.exe "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+)
+
 echo [4/4] Building Windows Installer with Inno Setup...
 set ISCC="C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
 if not exist %ISCC% (

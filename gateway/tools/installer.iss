@@ -14,7 +14,6 @@ OutputBaseFilename=DigiPLC_Installer
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a &desktop shortcut"; GroupDescription: "Additional icons:"
-Name: "startup"; Description: "Launch automatically when Windows starts"; GroupDescription: "Startup Options:"
 
 [Files]
 Source: "..\gateway-win.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -22,6 +21,7 @@ Source: "DigiPLCTray.exe"; DestDir: "{app}"; Flags: ignoreversion
 #ifexist "icon.ico"
 Source: "icon.ico"; DestDir: "{app}"; Flags: ignoreversion
 #endif
+Source: "vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall ignoreversion
 
 [Icons]
 Name: "{group}\Digi-PLC Gateway"; Filename: "{app}\DigiPLCTray.exe"
@@ -29,7 +29,7 @@ Name: "{group}\Uninstall Digi-PLC"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\Digi-PLC Gateway"; Filename: "{app}\DigiPLCTray.exe"; Tasks: desktopicon
 
 [Registry]
-Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "DigiPLCGateway"; ValueData: """{app}\DigiPLCTray.exe"""; Tasks: startup; Flags: uninsdeletevalue
 
 [Run]
+Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/install /quiet /norestart"; StatusMsg: "Installing Microsoft Visual C++ Redistributable (Required for Graphics)..."; Flags: waituntilterminated
 Filename: "{app}\DigiPLCTray.exe"; Description: "Launch Digi-PLC Gateway now"; Flags: nowait postinstall skipifsilent

@@ -1,12 +1,21 @@
 const path = require('path');
 const fs = require('fs');
 
+const os = require('os');
+
 // Determine AppData directory securely
 const appData = process.env.APPDATA || (process.platform === 'darwin' ? path.join(process.env.HOME, 'Library', 'Preferences') : path.join(process.env.HOME, '.local', 'share'));
 
 const appDir = path.join(appData, 'DigiPLC');
 const dbDir = path.join(appDir, 'db');
-const datasheetsDir = path.join(appDir, 'datasheets');
+
+// Resolve the correct Desktop path (handling Windows OneDrive syncing)
+let desktopPath = path.join(os.homedir(), 'Desktop');
+if (fs.existsSync(path.join(os.homedir(), 'OneDrive', 'Desktop'))) {
+    desktopPath = path.join(os.homedir(), 'OneDrive', 'Desktop');
+}
+
+const datasheetsDir = path.join(desktopPath, 'DigiPLC_Reports');
 
 // Ensure directories exist
 if (!fs.existsSync(appDir)) {
